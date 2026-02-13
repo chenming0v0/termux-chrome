@@ -7,10 +7,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import com.termux.app.TermuxActivity;
-import com.termux.app.R;
 import com.termux.view.TerminalView;
 import com.termux.view.TerminalViewClient;
+import com.termux.app.TermuxActivity;
 
 public class TerminalFragment extends Fragment {
 
@@ -21,8 +20,8 @@ public class TerminalFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_termux, container, false);
-        mTerminalView = rootView.findViewById(R.id.terminal_view);
+        View rootView = inflater.inflate(com.termux.R.layout.activity_termux, container, false);
+        mTerminalView = rootView.findViewById(com.termux.R.id.terminal_view);
         return rootView;
     }
 

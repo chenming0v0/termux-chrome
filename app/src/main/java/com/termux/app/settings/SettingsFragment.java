@@ -22,10 +22,14 @@ public class SettingsFragment extends Fragment {
     private CheckBox checkboxEnableZoom;
     private MaterialButton buttonSave;
 
+    private static final int RADIO_CHROME_TABS = 1;
+    private static final int RADIO_EDGE = 2;
+    private static final int RADIO_WEBVIEW = 3;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_settings, container, false);
+        return inflater.inflate(com.termux.R.layout.fragment_settings, container, false);
     }
 
     @Override
@@ -39,12 +43,12 @@ public class SettingsFragment extends Fragment {
     }
 
     private void initViews(View view) {
-        browserEngineRadioGroup = view.findViewById(R.id.browser_engine_radio_group);
-        checkboxEnableJavaScript = view.findViewById(R.id.checkbox_enable_javascript);
-        checkboxEnableDomStorage = view.findViewById(R.id.checkbox_enable_dom_storage);
-        checkboxEnableCache = view.findViewById(R.id.checkbox_enable_cache);
-        checkboxEnableZoom = view.findViewById(R.id.checkbox_enable_zoom);
-        buttonSave = view.findViewById(R.id.button_save);
+        browserEngineRadioGroup = view.findViewById(com.termux.R.id.browser_engine_radio_group);
+        checkboxEnableJavaScript = view.findViewById(com.termux.R.id.checkbox_enable_javascript);
+        checkboxEnableDomStorage = view.findViewById(com.termux.R.id.checkbox_enable_dom_storage);
+        checkboxEnableCache = view.findViewById(com.termux.R.id.checkbox_enable_cache);
+        checkboxEnableZoom = view.findViewById(com.termux.R.id.checkbox_enable_zoom);
+        buttonSave = view.findViewById(com.termux.R.id.button_save);
     }
 
     private void loadSettings() {
@@ -53,13 +57,13 @@ public class SettingsFragment extends Fragment {
         int engineValue = settings.getBrowserEngine();
         switch (engineValue) {
             case BrowserSettings.ENGINE_CHROME_TABS:
-                browserEngineRadioGroup.check(R.id.radio_chrome_tabs);
+                browserEngineRadioGroup.check(RADIO_CHROME_TABS);
                 break;
             case BrowserSettings.ENGINE_EDGE:
-                browserEngineRadioGroup.check(R.id.radio_edge);
+                browserEngineRadioGroup.check(RADIO_EDGE);
                 break;
             case BrowserSettings.ENGINE_WEBVIEW:
-                browserEngineRadioGroup.check(R.id.radio_webview);
+                browserEngineRadioGroup.check(RADIO_WEBVIEW);
                 break;
         }
 
@@ -87,7 +91,7 @@ public class SettingsFragment extends Fragment {
 
     private void updateWebViewSettingsVisibility() {
         int selectedId = browserEngineRadioGroup.getCheckedRadioButtonId();
-        boolean isWebView = (selectedId == R.id.radio_webview);
+        boolean isWebView = (selectedId == RADIO_WEBVIEW);
 
         checkboxEnableJavaScript.setEnabled(isWebView);
         checkboxEnableDomStorage.setEnabled(isWebView);
@@ -99,11 +103,11 @@ public class SettingsFragment extends Fragment {
         BrowserSettings settings = new BrowserSettings();
 
         int selectedId = browserEngineRadioGroup.getCheckedRadioButtonId();
-        if (selectedId == R.id.radio_chrome_tabs) {
+        if (selectedId == RADIO_CHROME_TABS) {
             settings.setBrowserEngine(BrowserSettings.ENGINE_CHROME_TABS);
-        } else if (selectedId == R.id.radio_edge) {
+        } else if (selectedId == RADIO_EDGE) {
             settings.setBrowserEngine(BrowserSettings.ENGINE_EDGE);
-        } else if (selectedId == R.id.radio_webview) {
+        } else if (selectedId == RADIO_WEBVIEW) {
             settings.setBrowserEngine(BrowserSettings.ENGINE_WEBVIEW);
         }
 
