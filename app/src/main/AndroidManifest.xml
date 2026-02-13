@@ -80,12 +80,6 @@
             android:theme="@style/Theme.TermuxActivity.DayNight.NoActionBar"
             tools:targetApi="n" />
 
-        <activity
-            android:name=".app.browser.BrowserEngineSelectorActivity"
-            android:exported="false"
-            android:label="选择浏览器内核"
-            android:theme="@style/Theme.TermuxApp.DayNight.NoActionBar" />
-
         <activity-alias
             android:name=".HomeActivity"
             android:exported="true"

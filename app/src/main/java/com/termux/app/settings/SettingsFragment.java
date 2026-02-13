@@ -21,9 +21,9 @@ public class SettingsFragment extends Fragment {
     private CheckBox checkboxEnableZoom;
     private MaterialButton buttonSave;
 
-    private static final int RADIO_CHROME_TABS = 1;
-    private static final int RADIO_EDGE = 2;
-    private static final int RADIO_WEBVIEW = 3;
+    private int RADIO_CHROME_TABS;
+    private int RADIO_EDGE;
+    private int RADIO_WEBVIEW;
 
     @Nullable
     @Override
@@ -48,6 +48,10 @@ public class SettingsFragment extends Fragment {
         checkboxEnableCache = view.findViewById(com.termux.R.id.checkbox_enable_cache);
         checkboxEnableZoom = view.findViewById(com.termux.R.id.checkbox_enable_zoom);
         buttonSave = view.findViewById(com.termux.R.id.button_save);
+
+        RADIO_CHROME_TABS = com.termux.R.id.radio_chrome_tabs;
+        RADIO_EDGE = com.termux.R.id.radio_edge;
+        RADIO_WEBVIEW = com.termux.R.id.radio_webview;
     }
 
     private void loadSettings() {

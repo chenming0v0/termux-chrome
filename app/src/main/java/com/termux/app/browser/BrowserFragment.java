@@ -33,7 +33,11 @@ public class BrowserFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(android.R.layout.activity_list_item, container, false);
+        android.widget.FrameLayout frameLayout = new android.widget.FrameLayout(requireContext());
+        frameLayout.setLayoutParams(new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+        return frameLayout;
     }
 
     @Override

@@ -45,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        showTerminalActivity();
+        // Default to browser tab
+        bottomNavigationView.setSelectedItemId(com.termux.R.id.navigation_browser);
     }
 
     private void showTerminalActivity() {
