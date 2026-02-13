@@ -3,7 +3,6 @@ package com.termux.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -17,7 +16,6 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private BrowserFragment browserFragment;
     private SettingsFragment settingsFragment;
-    private LinearLayout terminalContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         settingsFragment = new SettingsFragment();
 
         bottomNavigationView = findViewById(com.termux.R.id.bottom_navigation);
-        terminalContainer = findViewById(com.termux.R.id.terminal_container);
         
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
