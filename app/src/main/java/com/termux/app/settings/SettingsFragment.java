@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.button.MaterialButton;
-import com.termux.app.R;
 
 public class SettingsFragment extends Fragment {
 

@@ -64,7 +64,6 @@ public class BrowserFragment extends Fragment {
                 CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                 builder.setShowTitle(true);
                 builder.setToolbarColor(getResources().getColor(android.R.color.black));
-                builder.setEnableUrlBarHiding(true);
                 
                 CustomTabsIntent customTabsIntent = builder.build();
                 customTabsIntent.intent.setPackage(packageName);
@@ -79,8 +78,13 @@ public class BrowserFragment extends Fragment {
         };
 
         try {
+            Uri uri = Uri.parse(DEFAULT_URL);
+            Intent serviceIntent = new Intent(CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION);
+            serviceIntent.setPackage(packageName);
+            serviceIntent.setData(uri);
+            
             if (requireContext().bindService(
-                    CustomTabsService.getPackageNameToBind(packageName),
+                    serviceIntent,
                     connection,
                     Context.BIND_AUTO_CREATE)) {
                 return;
