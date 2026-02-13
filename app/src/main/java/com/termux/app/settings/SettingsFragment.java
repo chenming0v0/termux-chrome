@@ -52,10 +52,13 @@ public class SettingsFragment extends Fragment {
 
         int engineValue = settings.getBrowserEngine();
         switch (engineValue) {
-            case 0:
+            case BrowserSettings.ENGINE_CHROME_TABS:
                 browserEngineRadioGroup.check(R.id.radio_chrome_tabs);
                 break;
-            case 1:
+            case BrowserSettings.ENGINE_EDGE:
+                browserEngineRadioGroup.check(R.id.radio_edge);
+                break;
+            case BrowserSettings.ENGINE_WEBVIEW:
                 browserEngineRadioGroup.check(R.id.radio_webview);
                 break;
         }
@@ -98,6 +101,8 @@ public class SettingsFragment extends Fragment {
         int selectedId = browserEngineRadioGroup.getCheckedRadioButtonId();
         if (selectedId == R.id.radio_chrome_tabs) {
             settings.setBrowserEngine(BrowserSettings.ENGINE_CHROME_TABS);
+        } else if (selectedId == R.id.radio_edge) {
+            settings.setBrowserEngine(BrowserSettings.ENGINE_EDGE);
         } else if (selectedId == R.id.radio_webview) {
             settings.setBrowserEngine(BrowserSettings.ENGINE_WEBVIEW);
         }

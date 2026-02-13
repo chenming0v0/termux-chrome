@@ -1,5 +1,7 @@
 package com.termux.app.browser;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,9 +11,12 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.browser.customtabs.CustomTabsClient;
 import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.browser.customtabs.CustomTabsServiceConnection;
 import androidx.fragment.app.Fragment;
 import com.termux.app.R;
 import com.termux.app.settings.BrowserSettings;
@@ -19,6 +24,9 @@ import com.termux.app.settings.BrowserSettings;
 public class BrowserFragment extends Fragment {
 
     private static final String DEFAULT_URL = "https://www.baidu.com";
+    private static final String CHROME_PACKAGE = "com.android.chrome";
+    private static final String EDGE_PACKAGE = "com.microsoft.emmx";
+    
     private WebView webView;
 
     @Nullable
@@ -35,7 +43,10 @@ public class BrowserFragment extends Fragment {
 
         switch (settings.getBrowserEngine()) {
             case BrowserSettings.ENGINE_CHROME_TABS:
-                openWithChromeCustomTabs();
+                openWithCustomTabs(CHROME_PACKAGE);
+                break;
+            case BrowserSettings.ENGINE_EDGE:
+                openWithCustomTabs(EDGE_PACKAGE);
                 break;
             case BrowserSettings.ENGINE_WEBVIEW:
                 setupWebView(settings);
@@ -43,14 +54,54 @@ public class BrowserFragment extends Fragment {
         }
     }
 
-    private void openWithChromeCustomTabs() {
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        builder.setShowTitle(true);
-        builder.setToolbarColor(getResources().getColor(android.R.color.black));
-        builder.setEnableUrlBarHiding(true);
+    private void openWithCustomTabs(final String packageName) {
+        CustomTabsServiceConnection connection = new CustomTabsServiceConnection() {
+            @Override
+            public void onCustomTabsServiceConnected(ComponentName name, CustomTabsClient client) {
+                client.warmup(0L);
+                
+                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                builder.setShowTitle(true);
+                builder.setToolbarColor(getResources().getColor(android.R.color.black));
+                builder.setEnableUrlBarHiding(true);
+                
+                CustomTabsIntent customTabsIntent = builder.build();
+                customTabsIntent.intent.setPackage(packageName);
+                customTabsIntent.launchUrl(requireContext(), Uri.parse(DEFAULT_URL));
+                
+                requireContext().unbindService(this);
+            }
 
-        CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(requireContext(), Uri.parse(DEFAULT_URL));
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+            }
+        };
+
+        try {
+            if (requireContext().bindService(
+                    CustomTabsService.getPackageNameToBind(packageName),
+                    connection,
+                    Context.BIND_AUTO_CREATE)) {
+                return;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Toast.makeText(requireContext(), "未找到" + getBrowserName(packageName) + "，使用 WebView", Toast.LENGTH_SHORT).show();
+        BrowserSettings settings = BrowserSettings.loadSettings(requireContext());
+        settings.setBrowserEngine(BrowserSettings.ENGINE_WEBVIEW);
+        settings.saveSettings(requireContext());
+        setupWebView(settings);
+    }
+
+    private String getBrowserName(String packageName) {
+        if (CHROME_PACKAGE.equals(packageName)) {
+            return "Chrome";
+        } else if (EDGE_PACKAGE.equals(packageName)) {
+            return "Microsoft Edge";
+        }
+        return "浏览器";
     }
 
     private void setupWebView(BrowserSettings settings) {

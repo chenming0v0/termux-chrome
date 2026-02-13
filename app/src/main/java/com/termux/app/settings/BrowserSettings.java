@@ -7,6 +7,7 @@ public class BrowserSettings {
 
     public static final int ENGINE_CHROME_TABS = 0;
     public static final int ENGINE_WEBVIEW = 1;
+    public static final int ENGINE_EDGE = 2;
 
     private static final String PREFS_NAME = "BrowserSettings";
     private static final String KEY_BROWSER_ENGINE = "browser_engine";

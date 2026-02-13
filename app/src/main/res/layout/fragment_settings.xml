@@ -58,6 +58,22 @@
                     android:layout_marginBottom="8dp" />
 
                 <RadioButton
+                    android:id="@+id/radio_edge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Microsoft Edge"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="使用设备上的 Microsoft Edge\n在应用内以标签页形式显示"
+                    android:textSize="12sp"
+                    android:textColor="#999999"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginBottom="8dp" />
+
+                <RadioButton
                     android:id="@+id/radio_webview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -155,7 +171,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="• Chrome Custom Tabs: 调用设备上的 Chrome 浏览器内核，在应用内以标签页形式显示，性能最佳\n• WebView: 使用 Android 系统内置的 WebView 组件，完全集成在应用内\n• 所有浏览器功能都在应用内完成，不会跳出应用"
+            android:text="• Chrome Custom Tabs: 调用设备上的 Chrome 浏览器内核，在应用内以标签页形式显示，性能最佳\n• Microsoft Edge: 调用设备上的 Microsoft Edge 浏览器内核，在应用内以标签页形式显示\n• WebView: 使用 Android 系统内置的 WebView 组件，完全集成在应用内\n• 所有浏览器功能都在应用内完成，不会跳出应用"
             android:textSize="13sp"
             android:textColor="#999999"
             android:lineSpacingExtra="4dp" />
