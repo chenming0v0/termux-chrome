@@ -169,6 +169,15 @@
             android:layout_marginTop="16dp"
             app:cornerRadius="8dp" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_check_engine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="检测当前选中引擎是否可用"
+            android:layout_marginTop="8dp"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:cornerRadius="8dp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

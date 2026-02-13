@@ -1,5 +1,6 @@
 package com.termux.app.settings;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ public class SettingsFragment extends Fragment {
     private CheckBox checkboxEnableCache;
     private CheckBox checkboxEnableZoom;
     private MaterialButton buttonSave;
+    private MaterialButton buttonCheckEngine;
     private TextView currentEngineStatus;
 
     private int RADIO_CHROME_TABS;
@@ -50,6 +52,7 @@ public class SettingsFragment extends Fragment {
         checkboxEnableCache = view.findViewById(com.termux.R.id.checkbox_enable_cache);
         checkboxEnableZoom = view.findViewById(com.termux.R.id.checkbox_enable_zoom);
         buttonSave = view.findViewById(com.termux.R.id.button_save);
+        buttonCheckEngine = view.findViewById(com.termux.R.id.button_check_engine);
         currentEngineStatus = view.findViewById(com.termux.R.id.current_engine_status);
 
         RADIO_CHROME_TABS = com.termux.R.id.radio_chrome_tabs;
@@ -111,6 +114,13 @@ public class SettingsFragment extends Fragment {
                 saveSettings();
             }
         });
+
+        buttonCheckEngine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkEngineAvailability();
+            }
+        });
     }
 
     private void updateWebViewSettingsVisibility() {
@@ -121,6 +131,38 @@ public class SettingsFragment extends Fragment {
         checkboxEnableDomStorage.setEnabled(isWebView);
         checkboxEnableCache.setEnabled(isWebView);
         checkboxEnableZoom.setEnabled(isWebView);
+    }
+
+    private void checkEngineAvailability() {
+        int selectedId = browserEngineRadioGroup.getCheckedRadioButtonId();
+        if (selectedId == RADIO_WEBVIEW) {
+            Toast.makeText(requireContext(), "WebView 为系统内置组件，始终可用", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        String packageName;
+        String engineName;
+        if (selectedId == RADIO_EDGE) {
+            packageName = "com.microsoft.emmx";
+            engineName = "Microsoft Edge";
+        } else {
+            packageName = "com.android.chrome";
+            engineName = "Chrome";
+        }
+
+        boolean available;
+        try {
+            requireContext().getPackageManager().getPackageInfo(packageName, 0);
+            available = true;
+        } catch (PackageManager.NameNotFoundException e) {
+            available = false;
+        }
+
+        if (available) {
+            Toast.makeText(requireContext(), engineName + " 已安装，可以正常使用", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(requireContext(), engineName + " 未安装，将自动降级为 WebView", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void saveSettings() {
