@@ -56,9 +56,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showBrowserFragment() {
-        if (browserFragment == null) {
-            browserFragment = new BrowserFragment();
-        }
+        browserFragment = new BrowserFragment();
         replaceFragment(browserFragment);
     }
 
