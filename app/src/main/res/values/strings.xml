@@ -243,4 +243,9 @@
     <string name="microsoft_edge">Microsoft Edge</string>
     <string name="webview">WebView</string>
 
+    <!-- Navigation -->
+    <string name="nav_terminal">终端</string>
+    <string name="nav_browser">浏览器</string>
+    <string name="nav_settings">设置</string>
+
 </resources>

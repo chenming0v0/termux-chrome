@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -28,6 +29,8 @@ import android.widget.Toast;
 
 import com.termux.R;
 import com.termux.app.api.file.FileReceiverActivity;
+import com.termux.app.browser.BrowserFragment;
+import com.termux.app.settings.SettingsFragment;
 import com.termux.app.terminal.TermuxActivityRootView;
 import com.termux.app.terminal.TermuxTerminalSessionActivityClient;
 import com.termux.app.terminal.io.TermuxTerminalExtraKeys;
@@ -175,6 +178,13 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
 
     private float mTerminalToolbarDefaultHeight;
 
+    // Navigation
+    private View mTermuxMainContainer;
+    private View mContentFrameBrowser;
+    private View mContentFrameSettings;
+    private BrowserFragment mBrowserFragment;
+    private SettingsFragment mSettingsFragment;
+
 
     private static final int CONTEXT_MENU_SELECT_URL_ID = 0;
     private static final int CONTEXT_MENU_SHARE_TRANSCRIPT_ID = 1;
@@ -277,6 +287,51 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         // Send the {@link TermuxConstants#BROADCAST_TERMUX_OPENED} broadcast to notify apps that Termux
         // app has been opened.
         TermuxUtils.sendTermuxOpenedBroadcast(this);
+
+        setupNavigation();
+    }
+
+    private void setupNavigation() {
+        mTermuxMainContainer = findViewById(R.id.activity_termux_root_relative_layout);
+        mContentFrameBrowser = findViewById(R.id.content_frame_browser);
+        mContentFrameSettings = findViewById(R.id.content_frame_settings);
+
+        mBrowserFragment = new BrowserFragment();
+        mSettingsFragment = new SettingsFragment();
+
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.content_frame_browser, mBrowserFragment)
+            .replace(R.id.content_frame_settings, mSettingsFragment)
+            .commit();
+
+        Button navTerminal = findViewById(R.id.nav_button_terminal);
+        Button navBrowser = findViewById(R.id.nav_button_browser);
+        Button navSettings = findViewById(R.id.nav_button_settings);
+
+        View.OnClickListener navListener = v -> {
+            mTermuxMainContainer.setVisibility(View.GONE);
+            mContentFrameBrowser.setVisibility(View.GONE);
+            mContentFrameSettings.setVisibility(View.GONE);
+
+            int id = v.getId();
+            if (id == R.id.nav_button_terminal) {
+                mTermuxMainContainer.setVisibility(View.VISIBLE);
+                if (mTerminalView != null) mTerminalView.requestFocus();
+            } else if (id == R.id.nav_button_browser) {
+                mContentFrameBrowser.setVisibility(View.VISIBLE);
+            } else if (id == R.id.nav_button_settings) {
+                mContentFrameSettings.setVisibility(View.VISIBLE);
+            }
+        };
+
+        navTerminal.setOnClickListener(navListener);
+        navBrowser.setOnClickListener(navListener);
+        navSettings.setOnClickListener(navListener);
+
+        // Default to terminal view
+        mTermuxMainContainer.setVisibility(View.VISIBLE);
+        mContentFrameBrowser.setVisibility(View.GONE);
+        mContentFrameSettings.setVisibility(View.GONE);
     }
 
     @Override
