@@ -1,39 +1,41 @@
 package com.termux.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.termux.app.browser.BrowserFragment;
-import com.termux.app.terminal.TerminalFragment;
 import com.termux.app.settings.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
-    private TerminalFragment terminalFragment;
     private BrowserFragment browserFragment;
     private SettingsFragment settingsFragment;
+    private LinearLayout terminalContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(com.termux.R.layout.activity_termux_with_nav);
 
-        terminalFragment = new TerminalFragment();
         browserFragment = new BrowserFragment();
         settingsFragment = new SettingsFragment();
 
         bottomNavigationView = findViewById(com.termux.R.id.bottom_navigation);
+        terminalContainer = findViewById(com.termux.R.id.terminal_container);
+        
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
                 if (itemId == com.termux.R.id.navigation_terminal) {
-                    showTerminalFragment();
+                    showTerminalActivity();
                     return true;
                 } else if (itemId == com.termux.R.id.navigation_browser) {
                     showBrowserFragment();
@@ -46,14 +48,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        showTerminalFragment();
+        showTerminalActivity();
     }
 
-    private void showTerminalFragment() {
-        if (terminalFragment == null) {
-            terminalFragment = new TerminalFragment();
-        }
-        replaceFragment(terminalFragment);
+    private void showTerminalActivity() {
+        Intent intent = new Intent(this, TermuxActivity.class);
+        startActivity(intent);
+        overridePendingTransition(0, 0);
     }
 
     private void showBrowserFragment() {
