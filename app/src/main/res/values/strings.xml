@@ -235,8 +235,6 @@
     <!-- Donate Preference -->
     <string name="donate_preference_title">Donate</string>
 
-</resources>
-
     <!-- Browser Settings -->
     <string name="browser_not_found">%1$s not found, using WebView</string>
     <string name="browser">Browser</string>
@@ -244,4 +242,5 @@
     <string name="chrome_custom_tabs">Chrome Custom Tabs</string>
     <string name="microsoft_edge">Microsoft Edge</string>
     <string name="webview">WebView</string>
+
 </resources>
