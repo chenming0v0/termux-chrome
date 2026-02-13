@@ -93,7 +93,9 @@ public class BrowserFragment extends Fragment {
             e.printStackTrace();
         }
 
-        Toast.makeText(requireContext(), "未找到" + getBrowserName(packageName) + "，使用 WebView", Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireContext(), 
+            getString(com.termux.R.string.browser_not_found, getBrowserName(packageName)), 
+            Toast.LENGTH_SHORT).show();
         BrowserSettings settings = BrowserSettings.loadSettings(requireContext());
         settings.setBrowserEngine(BrowserSettings.ENGINE_WEBVIEW);
         settings.saveSettings(requireContext());
@@ -106,7 +108,7 @@ public class BrowserFragment extends Fragment {
         } else if (EDGE_PACKAGE.equals(packageName)) {
             return "Microsoft Edge";
         }
-        return "浏览器";
+        return getString(com.termux.R.string.browser);
     }
 
     private void setupWebView(BrowserSettings settings) {

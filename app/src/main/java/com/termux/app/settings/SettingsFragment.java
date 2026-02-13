@@ -117,6 +117,8 @@ public class SettingsFragment extends Fragment {
 
         settings.saveSettings(requireContext());
 
-        Toast.makeText(requireContext(), "设置已保存", Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireContext(), 
+            getString(com.termux.R.string.settings_saved), 
+            Toast.LENGTH_SHORT).show();
     }
 }
