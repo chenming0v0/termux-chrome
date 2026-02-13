@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +21,7 @@ public class SettingsFragment extends Fragment {
     private CheckBox checkboxEnableCache;
     private CheckBox checkboxEnableZoom;
     private MaterialButton buttonSave;
+    private TextView currentEngineStatus;
 
     private int RADIO_CHROME_TABS;
     private int RADIO_EDGE;
@@ -48,6 +50,7 @@ public class SettingsFragment extends Fragment {
         checkboxEnableCache = view.findViewById(com.termux.R.id.checkbox_enable_cache);
         checkboxEnableZoom = view.findViewById(com.termux.R.id.checkbox_enable_zoom);
         buttonSave = view.findViewById(com.termux.R.id.button_save);
+        currentEngineStatus = view.findViewById(com.termux.R.id.current_engine_status);
 
         RADIO_CHROME_TABS = com.termux.R.id.radio_chrome_tabs;
         RADIO_EDGE = com.termux.R.id.radio_edge;
@@ -74,6 +77,24 @@ public class SettingsFragment extends Fragment {
         checkboxEnableDomStorage.setChecked(settings.isDomStorageEnabled());
         checkboxEnableCache.setChecked(settings.isCacheEnabled());
         checkboxEnableZoom.setChecked(settings.isZoomEnabled());
+
+        updateEngineStatus(settings.getBrowserEngine());
+    }
+
+    private void updateEngineStatus(int engine) {
+        String name;
+        switch (engine) {
+            case BrowserSettings.ENGINE_EDGE:
+                name = "Microsoft Edge";
+                break;
+            case BrowserSettings.ENGINE_WEBVIEW:
+                name = "WebView";
+                break;
+            default:
+                name = "Chrome Custom Tabs";
+                break;
+        }
+        currentEngineStatus.setText("当前使用: " + name);
     }
 
     private void setupListeners() {
@@ -120,6 +141,8 @@ public class SettingsFragment extends Fragment {
         settings.setZoomEnabled(checkboxEnableZoom.isChecked());
 
         settings.saveSettings(requireContext());
+
+        updateEngineStatus(settings.getBrowserEngine());
 
         Toast.makeText(requireContext(), 
             getString(com.termux.R.string.settings_saved), 

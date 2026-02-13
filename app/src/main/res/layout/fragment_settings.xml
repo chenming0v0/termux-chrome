@@ -20,6 +20,16 @@
             android:layout_marginBottom="16dp" />
 
         <TextView
+            android:id="@+id/current_engine_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:padding="10dp"
+            android:background="#1A4CAF50"
+            android:textSize="14sp"
+            android:textColor="#4CAF50" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="浏览器内核选择"
