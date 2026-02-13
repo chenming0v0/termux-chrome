@@ -143,7 +143,17 @@ public class BrowserFragment extends Fragment {
         webSettings.setAllowContentAccess(true);
 
         webView.setWebChromeClient(new WebChromeClient());
-        webView.setWebViewClient(new WebViewClient());
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, android.webkit.WebResourceRequest request) {
+                String url = request.getUrl().toString();
+                if (url.startsWith("http://") || url.startsWith("https://")) {
+                    return false;
+                }
+                // Block non-http schemes like baiduboxapp://, intent://, etc.
+                return true;
+            }
+        });
 
         webView.loadUrl(DEFAULT_URL);
     }
