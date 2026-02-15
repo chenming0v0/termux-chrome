@@ -239,6 +239,7 @@
     <string name="browser_not_found">%1$s not found, using WebView</string>
     <string name="browser">Browser</string>
     <string name="settings_saved">Settings saved</string>
+    <string name="settings_saved_switch_hint">设置已保存，切换到浏览器页面即可生效</string>
     <string name="chrome_custom_tabs">Chrome Custom Tabs</string>
     <string name="microsoft_edge">Microsoft Edge</string>
     <string name="webview">WebView</string>

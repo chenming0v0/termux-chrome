@@ -318,6 +318,10 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
                 mTermuxMainContainer.setVisibility(View.VISIBLE);
                 if (mTerminalView != null) mTerminalView.requestFocus();
             } else if (id == R.id.nav_button_browser) {
+                mBrowserFragment = new BrowserFragment();
+                getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame_browser, mBrowserFragment)
+                    .commit();
                 mContentFrameBrowser.setVisibility(View.VISIBLE);
             } else if (id == R.id.nav_button_settings) {
                 mContentFrameSettings.setVisibility(View.VISIBLE);
