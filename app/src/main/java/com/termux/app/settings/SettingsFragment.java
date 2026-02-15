@@ -145,7 +145,7 @@ public class SettingsFragment extends Fragment {
         updateEngineStatus(settings.getBrowserEngine());
 
         Toast.makeText(requireContext(), 
-            getString(com.termux.R.string.settings_saved), 
+            getString(com.termux.R.string.settings_saved_switch_hint), 
             Toast.LENGTH_SHORT).show();
     }
 }
