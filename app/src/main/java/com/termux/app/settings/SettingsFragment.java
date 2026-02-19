@@ -116,10 +116,8 @@ public class SettingsFragment extends Fragment {
         int selectedEngine = getSelectedEngine();
         if (selectedEngine == appliedEngine) {
             pendingEngineStatus.setText("待应用: 无");
-            buttonSave.setText("保存设置");
         } else {
             pendingEngineStatus.setText("待应用: " + getEngineName(selectedEngine));
-            buttonSave.setText("应用并切换内核");
         }
     }
 
