@@ -22,10 +22,13 @@ public class SettingsFragment extends Fragment {
     private CheckBox checkboxEnableZoom;
     private MaterialButton buttonSave;
     private TextView currentEngineStatus;
+    private TextView pendingEngineStatus;
 
     private int RADIO_CHROME_TABS;
     private int RADIO_EDGE;
     private int RADIO_WEBVIEW;
+
+    private int appliedEngine;
 
     @Nullable
     @Override
@@ -41,6 +44,7 @@ public class SettingsFragment extends Fragment {
         loadSettings();
         setupListeners();
         updateWebViewSettingsVisibility();
+        updatePendingEngineStatus();
     }
 
     private void initViews(View view) {
@@ -51,6 +55,7 @@ public class SettingsFragment extends Fragment {
         checkboxEnableZoom = view.findViewById(com.termux.R.id.checkbox_enable_zoom);
         buttonSave = view.findViewById(com.termux.R.id.button_save);
         currentEngineStatus = view.findViewById(com.termux.R.id.current_engine_status);
+        pendingEngineStatus = view.findViewById(com.termux.R.id.pending_engine_status);
 
         RADIO_CHROME_TABS = com.termux.R.id.radio_chrome_tabs;
         RADIO_EDGE = com.termux.R.id.radio_edge;
@@ -59,9 +64,9 @@ public class SettingsFragment extends Fragment {
 
     private void loadSettings() {
         BrowserSettings settings = BrowserSettings.loadSettings(requireContext());
+        appliedEngine = settings.getBrowserEngine();
 
-        int engineValue = settings.getBrowserEngine();
-        switch (engineValue) {
+        switch (appliedEngine) {
             case BrowserSettings.ENGINE_CHROME_TABS:
                 browserEngineRadioGroup.check(RADIO_CHROME_TABS);
                 break;
@@ -78,23 +83,44 @@ public class SettingsFragment extends Fragment {
         checkboxEnableCache.setChecked(settings.isCacheEnabled());
         checkboxEnableZoom.setChecked(settings.isZoomEnabled());
 
-        updateEngineStatus(settings.getBrowserEngine());
+        updateEngineStatus(appliedEngine);
+    }
+
+    private String getEngineName(int engine) {
+        switch (engine) {
+            case BrowserSettings.ENGINE_EDGE:
+                return "Microsoft Edge";
+            case BrowserSettings.ENGINE_WEBVIEW:
+                return "WebView";
+            default:
+                return "Chrome Custom Tabs";
+        }
+    }
+
+    private int getSelectedEngine() {
+        int selectedId = browserEngineRadioGroup.getCheckedRadioButtonId();
+        if (selectedId == RADIO_CHROME_TABS) {
+            return BrowserSettings.ENGINE_CHROME_TABS;
+        } else if (selectedId == RADIO_EDGE) {
+            return BrowserSettings.ENGINE_EDGE;
+        } else {
+            return BrowserSettings.ENGINE_WEBVIEW;
+        }
     }
 
     private void updateEngineStatus(int engine) {
-        String name;
-        switch (engine) {
-            case BrowserSettings.ENGINE_EDGE:
-                name = "Microsoft Edge";
-                break;
-            case BrowserSettings.ENGINE_WEBVIEW:
-                name = "WebView";
-                break;
-            default:
-                name = "Chrome Custom Tabs";
-                break;
+        currentEngineStatus.setText("当前已生效: " + getEngineName(engine));
+    }
+
+    private void updatePendingEngineStatus() {
+        int selectedEngine = getSelectedEngine();
+        if (selectedEngine == appliedEngine) {
+            pendingEngineStatus.setText("待应用: 无");
+            buttonSave.setText("保存设置");
+        } else {
+            pendingEngineStatus.setText("待应用: " + getEngineName(selectedEngine));
+            buttonSave.setText("应用并切换内核");
         }
-        currentEngineStatus.setText("当前使用: " + name);
     }
 
     private void setupListeners() {
@@ -102,6 +128,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 updateWebViewSettingsVisibility();
+                updatePendingEngineStatus();
             }
         });
 
@@ -125,15 +152,8 @@ public class SettingsFragment extends Fragment {
 
     private void saveSettings() {
         BrowserSettings settings = new BrowserSettings();
-
-        int selectedId = browserEngineRadioGroup.getCheckedRadioButtonId();
-        if (selectedId == RADIO_CHROME_TABS) {
-            settings.setBrowserEngine(BrowserSettings.ENGINE_CHROME_TABS);
-        } else if (selectedId == RADIO_EDGE) {
-            settings.setBrowserEngine(BrowserSettings.ENGINE_EDGE);
-        } else if (selectedId == RADIO_WEBVIEW) {
-            settings.setBrowserEngine(BrowserSettings.ENGINE_WEBVIEW);
-        }
+        int selectedEngine = getSelectedEngine();
+        settings.setBrowserEngine(selectedEngine);
 
         settings.setJavaScriptEnabled(checkboxEnableJavaScript.isChecked());
         settings.setDomStorageEnabled(checkboxEnableDomStorage.isChecked());
@@ -142,10 +162,12 @@ public class SettingsFragment extends Fragment {
 
         settings.saveSettings(requireContext());
 
-        updateEngineStatus(settings.getBrowserEngine());
+        appliedEngine = selectedEngine;
+        updateEngineStatus(appliedEngine);
+        updatePendingEngineStatus();
 
-        Toast.makeText(requireContext(), 
-            getString(com.termux.R.string.settings_saved_switch_hint), 
+        Toast.makeText(requireContext(),
+            getString(com.termux.R.string.settings_saved_switch_hint),
             Toast.LENGTH_SHORT).show();
     }
 }
