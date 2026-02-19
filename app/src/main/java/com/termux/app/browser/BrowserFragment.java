@@ -1,8 +1,8 @@
 package com.termux.app.browser;
 
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.browser.customtabs.CustomTabsClient;
 import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.browser.customtabs.CustomTabsService;
 import androidx.browser.customtabs.CustomTabsServiceConnection;
 import androidx.fragment.app.Fragment;
 import com.termux.app.settings.BrowserSettings;
@@ -27,7 +26,7 @@ public class BrowserFragment extends Fragment {
     private static final String DEFAULT_URL = "https://www.baidu.com";
     private static final String CHROME_PACKAGE = "com.android.chrome";
     private static final String EDGE_PACKAGE = "com.microsoft.emmx";
-    
+
     private WebView webView;
 
     @Nullable
@@ -35,8 +34,8 @@ public class BrowserFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         android.widget.FrameLayout frameLayout = new android.widget.FrameLayout(requireContext());
         frameLayout.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT));
         return frameLayout;
     }
 
@@ -60,20 +59,28 @@ public class BrowserFragment extends Fragment {
     }
 
     private void openWithCustomTabs(final String packageName) {
+        if (!isPackageInstalled(packageName)) {
+            fallbackToWebView(packageName);
+            return;
+        }
+
         CustomTabsServiceConnection connection = new CustomTabsServiceConnection() {
             @Override
             public void onCustomTabsServiceConnected(ComponentName name, CustomTabsClient client) {
                 client.warmup(0L);
-                
+
                 CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                 builder.setShowTitle(true);
                 builder.setToolbarColor(getResources().getColor(android.R.color.black));
-                
+
                 CustomTabsIntent customTabsIntent = builder.build();
                 customTabsIntent.intent.setPackage(packageName);
                 customTabsIntent.launchUrl(requireContext(), Uri.parse(DEFAULT_URL));
-                
-                requireContext().unbindService(this);
+
+                try {
+                    requireContext().unbindService(this);
+                } catch (Exception ignored) {
+                }
             }
 
             @Override
@@ -81,25 +88,28 @@ public class BrowserFragment extends Fragment {
             }
         };
 
-        try {
-            Uri uri = Uri.parse(DEFAULT_URL);
-            Intent serviceIntent = new Intent(CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION);
-            serviceIntent.setPackage(packageName);
-            serviceIntent.setData(uri);
-            
-            if (requireContext().bindService(
-                    serviceIntent,
-                    connection,
-                    Context.BIND_AUTO_CREATE)) {
-                return;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        boolean bound = CustomTabsClient.bindCustomTabsService(requireContext(), packageName, connection);
+        if (!bound) {
+            fallbackToWebView(packageName);
         }
+    }
 
-        Toast.makeText(requireContext(), 
-            getString(com.termux.R.string.browser_not_found, getBrowserName(packageName)), 
+    private boolean isPackageInstalled(String packageName) {
+        try {
+            requireContext().getPackageManager().getPackageInfo(packageName, 0);
+            Intent launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(DEFAULT_URL));
+            launchIntent.setPackage(packageName);
+            return launchIntent.resolveActivity(requireContext().getPackageManager()) != null;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+    private void fallbackToWebView(String packageName) {
+        Toast.makeText(requireContext(),
+            getString(com.termux.R.string.browser_not_found, getBrowserName(packageName)),
             Toast.LENGTH_SHORT).show();
+
         BrowserSettings settings = BrowserSettings.loadSettings(requireContext());
         settings.setBrowserEngine(BrowserSettings.ENGINE_WEBVIEW);
         settings.saveSettings(requireContext());
@@ -118,21 +128,21 @@ public class BrowserFragment extends Fragment {
     private void setupWebView(BrowserSettings settings) {
         webView = new WebView(requireContext());
         ((ViewGroup) requireView()).addView(webView, new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
         ));
 
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(settings.isJavaScriptEnabled());
         webSettings.setDomStorageEnabled(settings.isDomStorageEnabled());
         webSettings.setDatabaseEnabled(settings.isDomStorageEnabled());
-        
+
         if (settings.isCacheEnabled()) {
             webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
         } else {
             webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         }
-        
+
         webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         webSettings.setSupportZoom(settings.isZoomEnabled());
         webSettings.setBuiltInZoomControls(settings.isZoomEnabled());
@@ -150,7 +160,6 @@ public class BrowserFragment extends Fragment {
                 if (url.startsWith("http://") || url.startsWith("https://")) {
                     return false;
                 }
-                // Block non-http schemes like baiduboxapp://, intent://, etc.
                 return true;
             }
         });

@@ -27,7 +27,17 @@
             android:padding="10dp"
             android:background="#1A4CAF50"
             android:textSize="14sp"
+            android:text="当前已生效: Chrome Custom Tabs"
             android:textColor="#4CAF50" />
+
+        <TextView
+            android:id="@+id/pending_engine_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="待应用: 无"
+            android:textSize="13sp"
+            android:textColor="#999999"
+            android:layout_marginBottom="12dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -165,7 +175,7 @@
             android:id="@+id/button_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="保存设置"
+            android:text="确定更改"
             android:layout_marginTop="16dp"
             app:cornerRadius="8dp" />
 
