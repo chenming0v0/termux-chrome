@@ -1,6 +1,7 @@
 package com.termux.app.settings;
 
 import android.os.Bundle;
+import android.content.pm.PackageManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,13 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.button.MaterialButton;
 
 public class SettingsFragment extends Fragment {
+
+    public interface OnBrowserEngineAppliedListener {
+        void onBrowserEngineApplied();
+    }
+
+    private static final String CHROME_PACKAGE = "com.android.chrome";
+    private static final String EDGE_PACKAGE = "com.microsoft.emmx";
 
     private RadioGroup browserEngineRadioGroup;
     private CheckBox checkboxEnableJavaScript;
@@ -127,13 +135,20 @@ public class SettingsFragment extends Fragment {
         BrowserSettings settings = new BrowserSettings();
 
         int selectedId = browserEngineRadioGroup.getCheckedRadioButtonId();
+        int targetEngine = BrowserSettings.ENGINE_CHROME_TABS;
         if (selectedId == RADIO_CHROME_TABS) {
-            settings.setBrowserEngine(BrowserSettings.ENGINE_CHROME_TABS);
+            targetEngine = BrowserSettings.ENGINE_CHROME_TABS;
         } else if (selectedId == RADIO_EDGE) {
-            settings.setBrowserEngine(BrowserSettings.ENGINE_EDGE);
+            targetEngine = BrowserSettings.ENGINE_EDGE;
         } else if (selectedId == RADIO_WEBVIEW) {
-            settings.setBrowserEngine(BrowserSettings.ENGINE_WEBVIEW);
+            targetEngine = BrowserSettings.ENGINE_WEBVIEW;
         }
+
+        if (!isEngineAvailable(targetEngine)) {
+            return;
+        }
+
+        settings.setBrowserEngine(targetEngine);
 
         settings.setJavaScriptEnabled(checkboxEnableJavaScript.isChecked());
         settings.setDomStorageEnabled(checkboxEnableDomStorage.isChecked());
@@ -145,7 +160,32 @@ public class SettingsFragment extends Fragment {
         updateEngineStatus(settings.getBrowserEngine());
 
         Toast.makeText(requireContext(), 
-            getString(com.termux.R.string.settings_saved_switch_hint), 
+            getString(com.termux.R.string.settings_saved_switch_hint),
             Toast.LENGTH_SHORT).show();
+
+        if (getActivity() instanceof OnBrowserEngineAppliedListener) {
+            ((OnBrowserEngineAppliedListener) getActivity()).onBrowserEngineApplied();
+        }
+    }
+
+    private boolean isEngineAvailable(int engine) {
+        if (engine == BrowserSettings.ENGINE_WEBVIEW) {
+            return true;
+        }
+
+        String packageName = engine == BrowserSettings.ENGINE_EDGE ? EDGE_PACKAGE : CHROME_PACKAGE;
+
+        try {
+            requireContext().getPackageManager().getPackageInfo(packageName, 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            String browserName = engine == BrowserSettings.ENGINE_EDGE ? "Microsoft Edge" : "Chrome";
+            Toast.makeText(
+                requireContext(),
+                getString(com.termux.R.string.browser_not_found, browserName),
+                Toast.LENGTH_SHORT
+            ).show();
+            return false;
+        }
     }
 }

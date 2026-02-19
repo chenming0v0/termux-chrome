@@ -80,7 +80,7 @@ import java.util.Arrays;
  * </ul>
  * about memory leaks.
  */
-public final class TermuxActivity extends AppCompatActivity implements ServiceConnection {
+public final class TermuxActivity extends AppCompatActivity implements ServiceConnection, SettingsFragment.OnBrowserEngineAppliedListener {
 
     /**
      * The connection to the {@link TermuxService}. Requested in {@link #onCreate(Bundle)} with a call to
@@ -336,6 +336,18 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         mTermuxMainContainer.setVisibility(View.VISIBLE);
         mContentFrameBrowser.setVisibility(View.GONE);
         mContentFrameSettings.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onBrowserEngineApplied() {
+        mTermuxMainContainer.setVisibility(View.GONE);
+        mContentFrameSettings.setVisibility(View.GONE);
+
+        mBrowserFragment = new BrowserFragment();
+        getSupportFragmentManager().beginTransaction()
+            .replace(R.id.content_frame_browser, mBrowserFragment)
+            .commit();
+        mContentFrameBrowser.setVisibility(View.VISIBLE);
     }
 
     @Override

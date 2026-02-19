@@ -165,7 +165,7 @@
             android:id="@+id/button_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="保存设置"
+            android:text="应用并切换内核"
             android:layout_marginTop="16dp"
             app:cornerRadius="8dp" />
 
