@@ -1,3 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="miku_green">#39C5BB</color>
+    <color name="liquid_glass_bg">#33FFFFFF</color>
+    <color name="liquid_glass_stroke">#8039C5BB</color>
+    <color name="liquid_glass_ripple">#4039C5BB</color>
+    <color name="miku_green_secondary">#B339C5BB</color>
 </resources>

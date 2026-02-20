@@ -14,46 +14,53 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:text="浏览器设置"
+            android:textColor="@color/miku_green"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/current_engine_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
+            android:background="@drawable/liquid_glass_surface"
             android:padding="10dp"
-            android:background="#1A4CAF50"
-            android:textSize="14sp"
             android:text="当前已生效: Chrome Custom Tabs"
-            android:textColor="#4CAF50" />
+            android:textColor="@color/miku_green"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/pending_engine_status"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/liquid_glass_surface"
+            android:padding="10dp"
             android:text="待应用: 无"
-            android:textSize="13sp"
-            android:textColor="#999999"
-            android:layout_marginBottom="12dp" />
+            android:textColor="@color/miku_green"
+            android:textSize="13sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="浏览器内核选择"
-            android:textSize="16sp"
-            android:textStyle="bold"
             android:layout_marginBottom="8dp"
-            android:textColor="?attr/colorPrimary" />
+            android:text="浏览器内核选择"
+            android:textColor="@color/miku_green"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            app:cardElevation="2dp"
-            app:cardCornerRadius="8dp">
+            app:cardBackgroundColor="@color/liquid_glass_bg"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/liquid_glass_stroke"
+            app:strokeWidth="1.5dp">
 
             <RadioGroup
                 android:id="@+id/browser_engine_radio_group"
@@ -65,70 +72,97 @@
                     android:id="@+id/radio_chrome_tabs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:buttonTint="@color/miku_green"
                     android:text="Chrome Custom Tabs"
+                    android:textColor="@color/miku_green"
                     android:textSize="14sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="使用设备上的 Chrome 内核（推荐）\n性能最好，启动速度快"
-                    android:textSize="12sp"
-                    android:textColor="#999999"
+                    android:layout_marginBottom="8dp"
                     android:layout_marginLeft="24dp"
-                    android:layout_marginBottom="8dp" />
+                    android:text="使用设备上的 Chrome 内核（推荐）\n性能最好，启动速度快"
+                    android:textColor="@color/miku_green_secondary"
+                    android:textSize="12sp" />
 
                 <RadioButton
                     android:id="@+id/radio_edge"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:buttonTint="@color/miku_green"
                     android:text="Microsoft Edge"
+                    android:textColor="@color/miku_green"
                     android:textSize="14sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="使用设备上的 Microsoft Edge\n在应用内以标签页形式显示"
-                    android:textSize="12sp"
-                    android:textColor="#999999"
+                    android:layout_marginBottom="8dp"
                     android:layout_marginLeft="24dp"
-                    android:layout_marginBottom="8dp" />
+                    android:text="使用设备上的 Microsoft Edge\n在应用内以标签页形式显示"
+                    android:textColor="@color/miku_green_secondary"
+                    android:textSize="12sp" />
 
                 <RadioButton
                     android:id="@+id/radio_webview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:buttonTint="@color/miku_green"
                     android:text="WebView"
+                    android:textColor="@color/miku_green"
                     android:textSize="14sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="24dp"
                     android:text="使用 Android 内置 WebView\n功能完整，兼容性好"
-                    android:textSize="12sp"
-                    android:textColor="#999999"
-                    android:layout_marginLeft="24dp" />
+                    android:textColor="@color/miku_green_secondary"
+                    android:textSize="12sp" />
 
             </RadioGroup>
         </com.google.android.material.card.MaterialCardView>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:elevation="0dp"
+            android:stateListAnimator="@null"
+            android:text="确定更改"
+            android:textColor="@color/miku_green"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/liquid_glass_bg"
+            app:cornerRadius="12dp"
+            app:rippleColor="@color/liquid_glass_ripple"
+            app:strokeColor="@color/liquid_glass_stroke"
+            app:strokeWidth="1.5dp" />
+
         <TextView
+            android:id="@+id/webview_settings_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="WebView 高级设置"
-            android:textSize="16sp"
-            android:textStyle="bold"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
-            android:textColor="?attr/colorPrimary"
-            android:id="@+id/webview_settings_title" />
+            android:text="WebView 高级设置"
+            android:textColor="@color/miku_green"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/webview_settings_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            app:cardElevation="2dp"
-            app:cardCornerRadius="8dp"
-            android:id="@+id/webview_settings_card">
+            app:cardBackgroundColor="@color/liquid_glass_bg"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/liquid_glass_stroke"
+            app:strokeWidth="1.5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -140,61 +174,81 @@
                     android:id="@+id/checkbox_enable_javascript"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="启用 JavaScript"
+                    android:buttonTint="@color/miku_green"
                     android:checked="true"
+                    android:text="启用 JavaScript"
+                    android:textColor="@color/miku_green"
                     android:textSize="14sp" />
 
                 <CheckBox
                     android:id="@+id/checkbox_enable_dom_storage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="启用 DOM 存储"
+                    android:buttonTint="@color/miku_green"
                     android:checked="true"
+                    android:text="启用 DOM 存储"
+                    android:textColor="@color/miku_green"
                     android:textSize="14sp" />
 
                 <CheckBox
                     android:id="@+id/checkbox_enable_cache"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="启用缓存"
+                    android:buttonTint="@color/miku_green"
                     android:checked="true"
+                    android:text="启用缓存"
+                    android:textColor="@color/miku_green"
                     android:textSize="14sp" />
 
                 <CheckBox
                     android:id="@+id/checkbox_enable_zoom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="启用缩放"
+                    android:buttonTint="@color/miku_green"
                     android:checked="true"
+                    android:text="启用缩放"
+                    android:textColor="@color/miku_green"
                     android:textSize="14sp" />
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_save"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="确定更改"
             android:layout_marginTop="16dp"
-            app:cornerRadius="8dp" />
+            android:layout_marginBottom="8dp"
+            app:cardBackgroundColor="@color/liquid_glass_bg"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/liquid_glass_stroke"
+            app:strokeWidth="1.5dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="说明"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="8dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="• Chrome Custom Tabs: 调用设备上的 Chrome 浏览器内核，在应用内以标签页形式显示，性能最佳\n• Microsoft Edge: 调用设备上的 Microsoft Edge 浏览器内核，在应用内以标签页形式显示\n• WebView: 使用 Android 系统内置的 WebView 组件，完全集成在应用内\n• 所有浏览器功能都在应用内完成，不会跳出应用"
-            android:textSize="13sp"
-            android:textColor="#999999"
-            android:lineSpacingExtra="4dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="说明"
+                    android:textColor="@color/miku_green"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="4dp"
+                    android:text="• Chrome Custom Tabs: 调用设备上的 Chrome 浏览器内核，在应用内以标签页形式显示，性能最佳\n• Microsoft Edge: 调用设备上的 Microsoft Edge 浏览器内核，在应用内以标签页形式显示\n• WebView: 使用 Android 系统内置的 WebView 组件，完全集成在应用内\n• 所有浏览器功能都在应用内完成，不会跳出应用"
+                    android:textColor="@color/miku_green_secondary"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 
